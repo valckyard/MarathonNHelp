@@ -44,7 +44,7 @@ namespace BJ_Tutorial
     {
 
 
-       public static void PigeCarte(int[] Paq, ref int CompteurPaq, ref List<int> Pigeur)   //////////////// PIGER UNE CARTE //////////////////////////////
+        public static void PigeCarte(int[] Paq, ref int CompteurPaq, ref List<int> Pigeur)   //////////////// PIGER UNE CARTE //////////////////////////////
         {
             Pigeur.Add(Paq[CompteurPaq]);  // le pigeur ajoute une carte reference au compteur du paquet
             CompteurPaq++;                  // ajoute 1 au compteur de la table de int[]
@@ -56,9 +56,9 @@ namespace BJ_Tutorial
         {
             Console.WriteLine($"------ {Joueur} Hit!------");
             Main.Add(Paquet[Compteur]);
-            Affichage.AfficherCarte(Paquet, Compteur, ValTot);
             ValCalc.ValeurCarteCalc(Paquet[Compteur], ref ValTot);
-            Compteur++;
+            Affichage.AfficherCarte(Paquet, Compteur, ValTot);
+            ++Compteur;
             Console.WriteLine();
         }
     }
@@ -177,13 +177,106 @@ namespace BJ_Tutorial
                     Console.WriteLine($"BlackJack! Joueur ! =- {ValTotJoueur} -=   Croupier a : {ValTotCroupier}  You are the winnerzzzzzzz!");
             }
         }
-        public static void FinalCheck()         // Groupe de Verification Finale
+        public static void FinalCheck(int ValTotCroupier, int ValTotJoueur)         // Groupe de Verification Finale
         {
+
+
+
+            //************* BJ SCENARIOS AND INCLUDE LOSER BUST ***************//
+
+
+            if ((ValTotCroupier == 21) ^ (ValTotJoueur == 21))
+            {
+
+
+                if ((ValTotCroupier == 21) & (ValTotJoueur == 21)) // Double BJ Scenario
+                    Console.WriteLine($"Egalite Croupier a : {ValTotCroupier} et Joueur : {ValTotJoueur} ... yay 2 BlackJack....");
+
+
+                else if ((ValTotCroupier == 21) | (ValTotJoueur == 21)) //Single BJ Ccenario
+                {
+
+
+                    if (ValTotCroupier == 21)
+
+
+                        if (ValTotJoueur > 21)
+                            Console.WriteLine($"BlackJack! Croupier ! =- {ValTotJoueur} -=   Joueur a  BUST !!!: {ValTotCroupier}  Pardu Nigausaure!!");
+
+
+                        else
+                            Console.WriteLine($"BlackJack! Croupier ! =- {ValTotCroupier} -=   Joueur a : {ValTotJoueur} Pardu Nigausaure!");
+
+
+
+                    else if (ValTotJoueur == 21)
+
+
+                        if (ValTotCroupier > 21)
+                            Console.WriteLine($"BlackJack! Joueur ! =- {ValTotJoueur} -=   Croupier a BUST : {ValTotCroupier}  You are the winnerzzzzzzz!");
+
+                        else
+                            Console.WriteLine($"BlackJack! Joueur ! =- {ValTotJoueur} -=   Croupier a : {ValTotCroupier}  You are the winnerzzzzzzz!");
+                }
+
+            }
+
+
+
+            else if (ValTotJoueur > 21 ^ ValTotCroupier > 21)
+            {
+                //************* DOUBLE BUST SCENARIOS ***************//
+
+
+                if (ValTotJoueur > 21 & ValTotCroupier > 21) // Double Bust Scenario 
+                {
+                    Console.WriteLine($"Vous etes poche en criss DOUBLE BUST !!! Joueur : {ValTotJoueur} Croupier : {ValTotCroupier}");
+                }
+
+                //************************ BUST SCENARIOS ************************************//
+
+
+                else if (ValTotJoueur > 21 | ValTotCroupier > 21) // Single Bust Scenario // NO BJ
+                {
+                    if (ValTotJoueur > 21)
+                        Console.WriteLine($"Joueur BUST! {ValTotJoueur} !!! Croupier has with {ValTotCroupier}!");
+                    
+                    else
+                        Console.WriteLine($"Croupier BUST! {ValTotCroupier} !!! You win with {ValTotJoueur}!");
+
+                }
+
+            }
+
+
+            //************** SCENARIOS DE BASE ***********************//
+
+
+            else if (ValTotCroupier < 21 & ValTotJoueur < 21)
+            {
+
+                if (ValTotCroupier == ValTotJoueur)   // Scenario Egalité
+                    Console.WriteLine($"Egalite Croupier a : {ValTotCroupier} et Joueur : {ValTotJoueur} ... yay....");
+
+
+                else if (ValTotCroupier > ValTotJoueur)  // Senario Croupier > Joueur
+                    Console.WriteLine($"Croupier a : {ValTotCroupier} Joueur a : {ValTotJoueur} Pardu Nigausaure!");
+
+
+                else                                     // Scenario Croupier < Joueur
+                    Console.WriteLine($"Joueur a : {ValTotJoueur} Croupier a : {ValTotCroupier} Winzorz!");
+            }
+
+            else
+                Console.WriteLine("Serieux ?");
+
         }
     }
 
+
     class Program           // Classe du Jeu
     {
+
         // Creer les Variables statiques
 
         static int JValTot;
@@ -196,93 +289,123 @@ namespace BJ_Tutorial
         static void Main(string[] args)
 
         {
-            
-            
+
+
             // Creer les Variables Locales
             Paq = new int[52];
             Paquet.CreePaq(ref Paq);           // Cree et Brasse Paq
             Paquet.BrassePaq(ref Paq);
             Compteur = 0;
 
+            PasseLesCartes();
+        }
+        static void PasseLesCartes()
+        {
 
-            do //Debut partie <--------------------------------------
+
+            if (Compteur > 45)
+            {
+                Paquet.CreePaq(ref Paq);       //Recree paq si trop utilise
+                Paquet.BrassePaq(ref Paq);
+                Compteur = 0;
+            }
+
+            MainJoueur = new List<int>();      // Cree Nouvelles Mains a Chaque Parties
+            MainCroupier = new List<int>();
+
+
+            Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);          // Pige 2x Joueur et 2x Croupier
+            Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
+            Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);
+            Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
+
+
+
+            ValCalc.ValeurMainCalc(MainJoueur, out JValTot);   // Calculer les Mains Croupier et Joueurs
+            ValCalc.ValeurMainCalc(MainCroupier, out CValTot);
+
+
+            //*****************************************************************************//
+
+
+
+            //
+            //Affichage des cartes Joueur et de la carte 1 Croupier
+            //
+
+            Console.WriteLine(JValTot);
+            Console.WriteLine(CValTot);
+
+
+
+
+            //********************************************************************************//
+
+            Checks.NaturalBJCHK(CValTot, JValTot);
+            if ((JValTot == 21) ^ (CValTot == 21))
+                PasseLesCartes();
+
+            // Demander Hit or Stand et mettre en ToUpper();
+            int HSDone = 0;
+            bool gateway = false;
+            do
             {
 
-
-
-                if (Compteur > 45)
+                if (HSDone == 0)
                 {
-                    Paquet.CreePaq(ref Paq);       //Recree paq si trop utilise
-                    Paquet.BrassePaq(ref Paq);
-                    Compteur = 0;
-                }
+                    string[] hscheck = new string[] { "H", "S" };
+                    // Bla bla 
+                    string hs = Console.ReadLine().ToUpper();
 
-                MainJoueur = new List<int>();      // Cree Nouvelles Mains a Chaque Parties
-                MainCroupier = new List<int>();
-
-
-                Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);          // Pige 2x Joueur et 2x Croupier
-                Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
-                Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);
-                Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
-
-
-
-                ValCalc.ValeurMainCalc(MainJoueur, out JValTot);   // Calculer les Mains Croupier et Joueurs
-                ValCalc.ValeurMainCalc(MainCroupier, out JValTot);
-
-
-                //*****************************************************************************//
-
-
-
-                //
-                //Affichage des cartes Joueur et de la carte 1 Croupier
-                //
-
-
-
-
-
-
-                //********************************************************************************//
-
-                Checks.NaturalBJCHK(CValTot, JValTot);
-                if ((JValTot == 21) || (CValTot == 21))
-                    return;
-
-
-                // Demander Hit or Stand et mettre en ToUpper();
-
-                bool gateway = false;
-                do
-                { 
-                string[] hscheck = new string[] { "H", "S" };
-                // Bla bla 
-                string hs = Console.ReadLine().ToUpper();
-          
                     switch (hs)
                     {
+
+
                         case "H":
                             Pige.HitPigeUneCarteAndVal("Joueur", Paq, ref Compteur, ref MainJoueur, ref JValTot);
                             // If Valeur totale joueur < 21
                             if (JValTot < 21)
-                                return;
+                                break;
+
                             // If Valeur totale joueur > 20
                             else
-                                continue;
+                                Console.WriteLine("Player Done");
+                            HSDone = 1;
+                            gateway = true;
+                            break;
+
+
                         case "S":
-                            Pige.HitPigeUneCarteAndVal("Croupier", Paq, ref Compteur, ref MainCroupier, ref CValTot);
-                            if (CValTot < 18)
-                                return;
+
+                            if ((CValTot <= JValTot) & (CValTot < 18))
+                            {
+                                while ((CValTot <= JValTot) & (CValTot < 18))
+                                    Pige.HitPigeUneCarteAndVal("Croupier", Paq, ref Compteur, ref MainCroupier, ref CValTot);
+                            }
                             else
-                                gateway = true;
-                            continue;
+                                HSDone = 2;
+                            gateway = true;
+                            break;
                     }
-                  
-                } while (gateway == false);
-                Checks.FinalCheck();
-            } while (true);
+                }
+
+            } while (gateway == false);
+
+
+
+            if (HSDone == 1)
+            {
+                while ((CValTot <= JValTot) & (CValTot < 18))
+                {
+                    Pige.HitPigeUneCarteAndVal("Croupier", Paq, ref Compteur, ref MainCroupier, ref CValTot);
+                }
+
+            }
+
+
+            Checks.FinalCheck(CValTot, JValTot);
+            PasseLesCartes();
+
         }
     }
 }
