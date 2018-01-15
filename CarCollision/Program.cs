@@ -23,12 +23,14 @@ namespace CarCollision
             for (int x = 0; x < 4; ++x)
             {
                 int Derriere = 27;
-                int RightLane = 2;
+                int RightLane = 4;
                 int Avant = 28;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition((RightLane), Console.CursorTop = Derriere);
-                Console.WriteLine("▄▄");
+                Console.WriteLine("┌┐");
                 Console.SetCursorPosition((RightLane), Console.CursorTop = Avant);
                 Console.WriteLine("██");
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
 
@@ -38,26 +40,84 @@ namespace CarCollision
             for (int x = 0; x < 4; ++x)
             {
                 int Derriere = 27;
-                int RightLane = 7;
+                int RightLane = 9;
                 int Avant = 28;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition((RightLane), Console.CursorTop = Derriere);
-                Console.WriteLine("▄▄");
+                Console.WriteLine("┌┐");
                 Console.SetCursorPosition((RightLane), Console.CursorTop = Avant);
                 Console.WriteLine("██");
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
 
-
+        
         static void RoadRender(int RoadScore)
         {
-            Console.WriteLine("|    I    |");
-            Console.WriteLine($"|    I    |             SCORE: {RoadScore}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("░░");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("|    ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("I");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("    |");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("░░");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("░░");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("|    ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("I");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("    |");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("░░");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"                 SCORE: {RoadScore}");
+
+
             for (int y = 0; y < 28; y++)
             {
-                Console.WriteLine("|    I    |");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("░░");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("|    ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("I");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("    |");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("░░");
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
 
+        static void OldBrickRenderDec(ref List<BrickPos> Pos)
+        {
+            if (Pos.Count != 0)
+            {
+
+                foreach (CarCollision.BrickPos p in Pos.ToList())
+                {
+                    p.CompteurClass = (p.CompteurClass) + 1;
+                    p.HeightClass = (p.HeightClass) + 1;
+                    if ((p.HeightClass) > 29)
+                    {
+                        Pos.Remove(p);
+                    }
+                    else if (p.HeightClass > 2 & p.HeightClass < 30)
+                    {
+                        Console.SetCursorPosition(p.LaneClass, Console.CursorTop = p.HeightClass);
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("╬╬╬╬");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
+                }
+            }
+        }
 
         static void KeyMachinRightLeft(ref bool direct) // Key PRESS
         {
@@ -88,8 +148,8 @@ namespace CarCollision
             {
                 int Compteur = 0;
                 int Height = -5;//Rand.Next(0, 30);
-                int RightLane = 1; // a 4
-                int LeftLane = 6; // a 10
+                int RightLane = 3; 
+                int LeftLane = 8; 
                 int Side = Rand.Next(1, 3); // Right or Left
                 if (Side == 1)
                     Side = RightLane;
@@ -114,27 +174,7 @@ namespace CarCollision
             }
         }
 
-        static void OldBrickRenderDec(ref List<BrickPos> Pos)
-        {
-            if (Pos.Count != 0)
-            {
-
-                foreach (CarCollision.BrickPos p in Pos.ToList())
-                {
-                    p.CompteurClass = (p.CompteurClass) + 1;
-                    p.HeightClass = (p.HeightClass) + 1;
-                    if ((p.HeightClass) > 29)
-                    {
-                        Pos.Remove(p);
-                    }
-                    else if (p.HeightClass > 2 & p.HeightClass < 30)
-                    {
-                        Console.SetCursorPosition(p.LaneClass, Console.CursorTop = p.HeightClass);
-                        Console.WriteLine("----");
-                    }
-                }
-            }
-        }
+    
         static void DoubleBrickTooClose(ref List<BrickPos> Pos)
         {
             //int deleted = 0;
@@ -196,13 +236,13 @@ namespace CarCollision
             {
                 if (p.HeightClass > 26 & p.HeightClass < 29)
                 {
-                    if (p.LaneClass == 6 & CarLane == true)
+                    if (p.LaneClass == 8 & CarLane == true)
                     {
                         GameOver(Score);
                         Console.ReadLine();
                         Environment.Exit(1);
                     }
-                    else if (p.LaneClass == 1 & CarLane == false)
+                    else if (p.LaneClass == 3 & CarLane == false)
                     {
                         GameOver(Score);
                         Console.ReadLine();
