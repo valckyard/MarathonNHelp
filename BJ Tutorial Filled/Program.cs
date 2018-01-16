@@ -16,16 +16,18 @@ namespace BJ_Tutorial
         static Random Randy = new Random();
 
 
-        public static void CreePaq(ref int[] PaquetVide)
+        public static int[] CreePaq(ref int[] PaquetVide)
         {
             PaquetVide = new int[52];
             for (int i = 0; i < 52; ++i)
                 PaquetVide[i] = i;
+
+            return PaquetVide;
         }
 
 
 
-        public static void BrassePaq(ref int[] PaquetNonBrasse)
+        public static int[] BrassePaq(ref int[] PaquetNonBrasse)
         {
             for (int i = 0; i < PaquetNonBrasse.Length; ++i)
             {
@@ -34,6 +36,7 @@ namespace BJ_Tutorial
                 PaquetNonBrasse[i] = PaquetNonBrasse[j];
                 PaquetNonBrasse[j] = temp;
             }
+            return PaquetNonBrasse;
         }
     }
 
@@ -44,22 +47,24 @@ namespace BJ_Tutorial
     {
 
 
-        public static void PigeCarte(int[] Paq, ref int CompteurPaq, ref List<int> Pigeur)   //////////////// PIGER UNE CARTE //////////////////////////////
+        public static int PigeCarte(int[] Paq,int CompteurPaq,List<int> Pigeur)   //////////////// PIGER UNE CARTE //////////////////////////////
         {
             Pigeur.Add(Paq[CompteurPaq]);  // le pigeur ajoute une carte reference au compteur du paquet
             CompteurPaq++;                  // ajoute 1 au compteur de la table de int[]
+            return CompteurPaq;
         }
 
 
 
-        public static void HitPigeUneCarteAndVal(string Joueur, int[] Paquet, ref int Compteur, ref List<int> Main, ref int ValTot)  /////////PIGER UNE CARTE ET AJOUTER LA VALEUR AU TOTAL/////////
+        public static int HitPigeUneCarteAndVal(string Joueur, int[] Paquet,int Compteur,List<int> Main,ref int ValTot)  /////////PIGER UNE CARTE ET AJOUTER LA VALEUR AU TOTAL/////////
         {
             Console.WriteLine($"------ {Joueur} Hit!------");
             Main.Add(Paquet[Compteur]);
-            ValCalc.ValeurCarteCalc(Paquet[Compteur], ref ValTot);
+            ValTot = ValCalc.ValeurCarteCalc(Paquet[Compteur], ValTot);
             Affichage.AfficherCarte(Paquet, Compteur, ValTot);
             ++Compteur;
             Console.WriteLine();
+            return Compteur;
         }
     }
 
@@ -70,9 +75,9 @@ namespace BJ_Tutorial
     {
 
 
-        public static void ValeurMainCalc(List<int> Main, out int ValTotOut)  /////////// CALCUL VALEUR D'UNE MAIN //////////////////////
+        public static int ValeurMainCalc(List<int> Main, int ValTot)  /////////// CALCUL VALEUR D'UNE MAIN //////////////////////
         {
-            int ValTot = 0; // initialise
+            ValTot = 0; // initialise
             foreach (int Carte in Main)
             {
                 int x = Carte % 13;
@@ -84,14 +89,14 @@ namespace BJ_Tutorial
                     ValTot += 10;
             }
 
-            Checks.CheckAsVal(Main, ref ValTot); // Ajuste la Valeur des AS de ValTot pour Soft Hands
+           ValTot = Checks.CheckAsVal(Main, ValTot); // Ajuste la Valeur des AS de ValTot pour Soft Hands
 
-            ValTotOut = ValTot;
+           return ValTot;
         }
 
 
 
-        public static void ValeurCarteCalc(int Carte, ref int ValTot)  /////////// CALCUL VALEUR DE UNE CARTE //////////////////////
+        public static int ValeurCarteCalc(int Carte, int ValTot)  /////////// CALCUL VALEUR DE UNE CARTE //////////////////////
         {
             int x = Carte % 13;
             if (x < 10)
@@ -114,6 +119,7 @@ namespace BJ_Tutorial
                     ValTot += 0; //meh y vaut deja 1
                 }
             }
+            return ValTot;
         }
     }
 
@@ -144,7 +150,7 @@ namespace BJ_Tutorial
     {
 
 
-        public static void CheckAsVal(List<int> Main, ref int ValTot)         // Ajustements d'As
+        public static int CheckAsVal(List<int> Main, int ValTot)         // Ajustements d'As
         {
             foreach (var Carte in Main) // Verifie tt les cartes pour un AS
             {
@@ -161,6 +167,7 @@ namespace BJ_Tutorial
                     }
                 }
             }
+            return ValTot;
         }
 
 
@@ -177,6 +184,8 @@ namespace BJ_Tutorial
                     Console.WriteLine($"BlackJack! Joueur ! =- {ValTotJoueur} -=   Croupier a : {ValTotCroupier}  You are the winnerzzzzzzz!");
             }
         }
+
+
         public static void FinalCheck(int ValTotCroupier, int ValTotJoueur)         // Groupe de Verification Finale
         {
 
@@ -201,7 +210,7 @@ namespace BJ_Tutorial
 
 
                         if (ValTotJoueur > 21)
-                            Console.WriteLine($"BlackJack! Croupier ! =- {ValTotJoueur} -=   Joueur a  BUST !!!: {ValTotCroupier}  Pardu Nigausaure!!");
+                            Console.WriteLine($"BlackJack! Croupier ! =- {ValTotCroupier} -=   Joueur a  BUST !!!: {ValTotJoueur}  Pardu Nigausaure!!");
 
 
                         else
@@ -293,8 +302,8 @@ namespace BJ_Tutorial
 
             // Creer les Variables Locales
             Paq = new int[52];
-            Paquet.CreePaq(ref Paq);           // Cree et Brasse Paq
-            Paquet.BrassePaq(ref Paq);
+            Paq = Paquet.CreePaq(ref Paq);           // Cree et Brasse Paq
+            Paq = Paquet.BrassePaq(ref Paq);
             Compteur = 0;
 
             PasseLesCartes();
@@ -305,8 +314,8 @@ namespace BJ_Tutorial
 
             if (Compteur > 45)
             {
-                Paquet.CreePaq(ref Paq);       //Recree paq si trop utilise
-                Paquet.BrassePaq(ref Paq);
+                Paq = Paquet.CreePaq(ref Paq);       //Recree paq si trop utilise
+                Paq = Paquet.BrassePaq(ref Paq);
                 Compteur = 0;
             }
 
@@ -314,15 +323,15 @@ namespace BJ_Tutorial
             MainCroupier = new List<int>();
 
 
-            Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);          // Pige 2x Joueur et 2x Croupier
-            Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
-            Pige.PigeCarte(Paq, ref Compteur, ref MainJoueur);
-            Pige.PigeCarte(Paq, ref Compteur, ref MainCroupier);
+            Compteur = Pige.PigeCarte(Paq, Compteur, MainJoueur);          // Pige 2x Joueur et 2x Croupier
+            Compteur = Pige.PigeCarte(Paq, Compteur, MainCroupier);
+            Compteur = Pige.PigeCarte(Paq, Compteur, MainJoueur);
+            Compteur = Pige.PigeCarte(Paq, Compteur, MainCroupier);
 
 
 
-            ValCalc.ValeurMainCalc(MainJoueur, out JValTot);   // Calculer les Mains Croupier et Joueurs
-            ValCalc.ValeurMainCalc(MainCroupier, out CValTot);
+            JValTot = ValCalc.ValeurMainCalc(MainJoueur, JValTot);   // Calculer les Mains Croupier et Joueurs
+            CValTot = ValCalc.ValeurMainCalc(MainCroupier, CValTot);
 
 
             //*****************************************************************************//
@@ -362,7 +371,7 @@ namespace BJ_Tutorial
 
 
                         case "H":
-                            Pige.HitPigeUneCarteAndVal("Joueur", Paq, ref Compteur, ref MainJoueur, ref JValTot);
+                            Compteur = Pige.HitPigeUneCarteAndVal("Joueur", Paq,Compteur, MainJoueur, ref JValTot);
                             // If Valeur totale joueur < 21
                             if (JValTot < 21)
                                 break;
@@ -380,7 +389,7 @@ namespace BJ_Tutorial
                             if ((CValTot <= JValTot) & (CValTot < 18))
                             {
                                 while ((CValTot <= JValTot) & (CValTot < 18))
-                                    Pige.HitPigeUneCarteAndVal("Croupier", Paq, ref Compteur, ref MainCroupier, ref CValTot);
+                                   Compteur = Pige.HitPigeUneCarteAndVal("Croupier", Paq, Compteur, MainCroupier, ref CValTot);
                             }
                             else
                                 HSDone = 2;
@@ -397,7 +406,7 @@ namespace BJ_Tutorial
             {
                 while ((CValTot <= JValTot) & (CValTot < 18))
                 {
-                    Pige.HitPigeUneCarteAndVal("Croupier", Paq, ref Compteur, ref MainCroupier, ref CValTot);
+                  Compteur =  Pige.HitPigeUneCarteAndVal("Croupier", Paq, Compteur, MainCroupier, ref CValTot);
                 }
 
             }
