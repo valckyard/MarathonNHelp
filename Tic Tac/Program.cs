@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 
 namespace Tic_Tac
 {
@@ -30,14 +29,15 @@ namespace Tic_Tac
         public ValeurCase Valeur { get; set; }
         public CaseGrid Nom { get; set; }
     }
-    class Program
+
+    internal class Program
     {
         static void Grid()
         {
-            MyGrid = new List<GridClass>();
+            _myGrid = new List<GridClass>();
             for (int x = 0; x < 9; x++)
             {
-                MyGrid.Add(new GridClass() {Used = false, Nom = (CaseGrid)x });
+                _myGrid.Add(new GridClass() {Used = false, Nom = (CaseGrid)x });
             }
         }
 
@@ -51,7 +51,7 @@ namespace Tic_Tac
         }
         public static void AffichageUpdate()
         {
-            foreach (GridClass g in MyGrid.ToList())
+            foreach (GridClass g in _myGrid.ToList())
             {
 
                 switch (g.Nom)
@@ -62,7 +62,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -78,7 +78,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -94,7 +94,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -110,7 +110,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -126,7 +126,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -142,7 +142,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -158,7 +158,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -174,7 +174,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -190,7 +190,7 @@ namespace Tic_Tac
                         {
                             case true:
                                 {
-                                    WriteXO(g);
+                                    WriteXo(g);
                                 }
                                 break;
                             case false:
@@ -205,7 +205,7 @@ namespace Tic_Tac
             }
         }
 
-        static void WriteXO(GridClass g)
+        public static void WriteXo(GridClass g)
         {
             switch (g.Valeur)
             {
@@ -232,15 +232,15 @@ namespace Tic_Tac
 
         static void WinLoseCheck() // make more efficient
         {
-            foreach(GridClass C in MyGrid)
+            foreach(GridClass c in _myGrid)
             {
 
             }
-            if ((MyGrid[0].Used & MyGrid[1].Used & MyGrid[2].Used) == (true))
+            if ((_myGrid[0].Used & _myGrid[1].Used & _myGrid[2].Used) == (true))
             { bool win = true;
                 for (int x = 0; x < 3; ++x)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -253,14 +253,14 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[3].Used & MyGrid[4].Used & MyGrid[5].Used) == (true))
+            if ((_myGrid[3].Used & _myGrid[4].Used & _myGrid[5].Used) == (true))
             {
                 bool win = true;
                 for (int x = 3; x < 6; ++x)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
-                        win = false;
+                        win = !win;
                     }
                 }
                 if (win == true)
@@ -272,12 +272,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[6].Used & MyGrid[7].Used & MyGrid[8].Used) == (true))
+            if ((_myGrid[6].Used & _myGrid[7].Used & _myGrid[8].Used) == (true))
             {
                 bool win = true;
                 for (int x = 6; x < 9; ++x)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -291,12 +291,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[0].Used & MyGrid[3].Used & MyGrid[6].Used) == (true))
+            if ((_myGrid[0].Used & _myGrid[3].Used & _myGrid[6].Used) == (true))
             {
                 bool win = true;
                 for (int x = 0; x < 7; x += 3)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -310,12 +310,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[1].Used & MyGrid[4].Used & MyGrid[7].Used) == (true))
+            if ((_myGrid[1].Used & _myGrid[4].Used & _myGrid[7].Used) == (true))
             {
                 bool win = true;
                 for (int x = 1; x < 8; x += 3)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -329,12 +329,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[2].Used & MyGrid[5].Used & MyGrid[8].Used) == (true))
+            if ((_myGrid[2].Used & _myGrid[5].Used & _myGrid[8].Used) == (true))
             {
                 bool win = true;
                 for (int x = 2; x < 9; x += 3)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -348,12 +348,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[0].Used & MyGrid[4].Used & MyGrid[8].Used) == (true))
+            if ((_myGrid[0].Used & _myGrid[4].Used & _myGrid[8].Used) == (true))
             {
                 bool win = true;
                 for (int x = 0; x < 9; x += 4)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -367,12 +367,12 @@ namespace Tic_Tac
                     NewGame();
                 }
             }
-            if ((MyGrid[2].Used & MyGrid[4].Used & MyGrid[6].Used) == (true))
+            if ((_myGrid[2].Used & _myGrid[4].Used & _myGrid[6].Used) == true)
             {
                 bool win = true;
                 for (int x = 2; x < 7; x += 2)
                 {
-                    if (MyGrid[x].Valeur != (ValeurCase)Player)
+                    if (_myGrid[x].Valeur != (ValeurCase)Player)
                     {
                         win = false;
                     }
@@ -390,48 +390,49 @@ namespace Tic_Tac
 
         static void PlayerChoice()
         {
-            int y = 0;
             Console.SetCursorPosition(0, 10);
-            Console.WriteLine($"What Case Player{Player}?");
+            Console.WriteLine($"What Case _player{Player}?");
             Console.SetCursorPosition(0, 11);
-            while (int.TryParse(Console.ReadLine(), out y) == false) {
+            int y;
+            while (int.TryParse(Console.ReadLine(), out y) == false)
+            {
 
                 if (y < 1 | y > 9)
                     PlayerChoice();
-            };
+            }
 
 
             for (int x = 1; x < 10; x++)
             {
                 if (x == y)
                 {
-                    if (MyGrid[x - 1].Used == true)
+                    if (_myGrid[x - 1].Used == true)
                     {
                         PlayerChoice();
                     }
-                    if (MyGrid[x - 1].Used == false)
+                    if (_myGrid[x - 1].Used == false)
                     {
-                        MyGrid[x - 1].Used = true;
-                        MyGrid[x - 1].Valeur = (ValeurCase)Player;
+                        _myGrid[x - 1].Used = true;
+                        _myGrid[x - 1].Valeur = (ValeurCase)Player;
                     }
                 }
             }
         }
-        static List<GridClass> MyGrid;
-        static int Player; // 1 is O 2 is X
 
-        static void Main(string[] args)
-        {
-            NewGame();
-        }
-        static void NewGame()
+        private static List<GridClass> _myGrid;
+        public static int Player; // 1 is O 2 is X
+
+        private static void Main() => NewGame();
+
+        private static void NewGame()
         {
             Player = 1;
             Grid();
             Affichage();
             Run();
         }
-        static void Run()
+
+        private static void Run()
         {
             AffichageUpdate();
             PlayerChoice();
